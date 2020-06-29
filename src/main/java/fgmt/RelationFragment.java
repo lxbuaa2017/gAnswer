@@ -61,7 +61,7 @@ public class RelationFragment extends Fragment
 			String outString = lines[2].substring(1, lines[2].length()-1);
 			
 			// Record which relations can connect LITERAL objects.
-			if(outString.equals("itera"))	// "literal".substring(1, length()-1)
+			if(outString.equals("literal"))	// "literal".substring(1, length()-1)
 				literalRelationSet.add(pid);
 			
 			if(!relFragments.containsKey(pid))

@@ -98,7 +98,9 @@ public class GAnswer {
 				// First detect by SPARQLs.
 				Sparql spq = qlog.rankedSparqls.get(i);
 				String questionFocus = QuestionParsing.detectQuestionFocus(spq);
-				
+				System.out.println("==========================");
+				System.out.println(questionFocus);
+				System.out.println("==========================");
 				// If failed, use TARGET directly.
 				if(questionFocus == null)
 					questionFocus = "?"+qlog.target.originalForm;
@@ -113,7 +115,7 @@ public class GAnswer {
 			return qlog;
 		}	
 	}
-	
+//	(match (a)-[r]->(b) where a.name='聚美优品' return distinct a)
 	public String getStdSparqlWoPrefix(QueryLogger qlog, Sparql curSpq) 
 	{
 		if(qlog == null || curSpq == null)
@@ -124,13 +126,16 @@ public class GAnswer {
 			res += "ask where";
 		else
 		{
-			if(!curSpq.countTarget)
-				res += ("select DISTINCT " + curSpq.questionFocus + " where");		
+			if(!curSpq.countTarget) {
+//				res += ("select DISTINCT " + curSpq.questionFocus + " where");
+				res += "match (a)-[r]->(b) where ";
+				res += curSpq.toStringForNeo4j();
+			}
 			else
-				res += ("select COUNT(DISTINCT " + curSpq.questionFocus + ") where");	
+				res += ("select COUNT(DISTINCT " + curSpq.questionFocus + ") where");
 		}					
 		res += "\n";
-		res += curSpq.toStringForGStore();
+//		res += curSpq.toStringForGStore();
 		if(curSpq.moreThanStr != null)
 		{
 			res += curSpq.moreThanStr+"\n";
@@ -254,7 +259,8 @@ public class GAnswer {
 				{
 					if(curSpq.tripleList.size()>0 && curSpq.questionFocus!=null)
 					{
-						m = ga.getAnswerFromGStore2(curSpq);
+						//m = ga.getAnswerFromGStore2(curSpq);
+						//TODO 从neo4j数据库获取答案
 					}
 					if(m != null && m.answers != null) 
                     {

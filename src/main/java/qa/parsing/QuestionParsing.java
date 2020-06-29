@@ -160,12 +160,11 @@ public class QuestionParsing {
 		}
 		return false;
 	}
-	
+	//todo
 	public static String detectQuestionFocus(Sparql spq) {
 		String ret = null;
 		int posi = Integer.MAX_VALUE;
 		for (Triple t : spq.tripleList) {
-			
 			if (!t.isSubjConstant()) {
 				Word subj = t.getSubjectWord();
 				if (subj!=null && subj.position < posi) {
