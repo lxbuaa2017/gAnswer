@@ -21,8 +21,7 @@ import rdf.SimpleRelation;
 import rdf.SemanticUnit;
 
 /**
- * Core class to build query graph, i.e, to generate SPARQL queries.
- * @author husen
+ * Core class to build query graph, i.e, to generate Cypher queries.
  */
 public class BuildQueryGraph 
 {

@@ -98,9 +98,6 @@ public class GAnswer {
 				// First detect by SPARQLs.
 				Sparql spq = qlog.rankedSparqls.get(i);
 				String questionFocus = QuestionParsing.detectQuestionFocus(spq);
-				System.out.println("==========================");
-				System.out.println(questionFocus);
-				System.out.println("==========================");
 				// If failed, use TARGET directly.
 				if(questionFocus == null)
 					questionFocus = "?"+qlog.target.originalForm;
@@ -128,7 +125,7 @@ public class GAnswer {
 		{
 			if(!curSpq.countTarget) {
 //				res += ("select DISTINCT " + curSpq.questionFocus + " where");
-				res += "match (a)-[r]->(b) where ";
+				res += "match (a)-[r]-(b) where ";
 				res += curSpq.toStringForNeo4j();
 			}
 			else
@@ -147,7 +144,34 @@ public class GAnswer {
 		
 		return res;
 	}
-	
+	public String getStdSparqlWoPrefix2(QueryLogger qlog, Sparql curSpq)
+	{
+		if(qlog == null || curSpq == null)
+			return null;
+
+		String res = "";
+		if (qlog.s.sentenceType==SentenceType.GeneralQuestion)
+			res += "ask where";
+		else
+		{
+			if(!curSpq.countTarget)
+				res += ("select DISTINCT " + curSpq.questionFocus + " where");
+			else
+				res += ("select COUNT(DISTINCT " + curSpq.questionFocus + ") where");
+		}
+		res += "\n";
+		res += curSpq.toStringForGStore2();
+		if(curSpq.moreThanStr != null)
+		{
+			res += curSpq.moreThanStr+"\n";
+		}
+		if(curSpq.mostStr != null)
+		{
+			res += curSpq.mostStr+"\n";
+		}
+
+		return res;
+	}
 	// Notice, this will change the original SPARQL.
 	public Sparql getUntypedSparql (Sparql spq) 
 	{
@@ -243,6 +267,7 @@ public class GAnswer {
 			for(idx=1; idx<=Math.min(qlog.rankedSparqls.size(), 5); idx++) 
 			{
 				Sparql curSpq = qlog.rankedSparqls.get(idx-1);
+				//todo
 				String stdSPQwoPrefix = ga.getStdSparqlWoPrefix(qlog, curSpq);
 				lastSpqList.add(stdSPQwoPrefix);
 				

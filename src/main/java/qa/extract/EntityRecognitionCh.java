@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 
+import application.Neo4jHttpConnector;
 import lcn.EntityFragmentFields;
 
 import com.huaban.analysis.jieba.JiebaSegmenter;
@@ -122,23 +123,23 @@ public class EntityRecognitionCh {
 	{
 		long t0 = System.currentTimeMillis();
 		List<String> nent = FileUtil.readFile("data/pkubase/paraphrase/ccksminutf.txt");
-		List<String> mention2ent = FileUtil.readFile("data/pkubase/paraphrase/pkubase-mention2ent.txt");		
+//		List<String> mention2ent = FileUtil.readFile("data/pkubase/paraphrase/pkubase-mention2ent.txt");
 
 		entMap=new HashMap<>();
 		nentMap=new HashMap<>();
-
+		List<String> mention2ent = Neo4jHttpConnector.getAllNodeNames();
 		System.out.println("Mention2Ent size: " + mention2ent.size());
 		for (String input:mention2ent)
 		{
-			Ent q=new Ent(input);
-			if (entMap.containsKey(q.mention)) 
-				entMap.get(q.mention).add(q.entity_name);
-			else
-			{
-				List<String> l=new ArrayList<>();
-				l.add(q.entity_name);
-				entMap.put(q.mention, l);
-			}
+			entMap.put(input, Collections.singletonList(input));
+//			if (entMap.containsKey(q.mention))
+//				entMap.get(q.mention).add(q.entity_name);
+//			else
+//			{
+//				List<String> l=new ArrayList<>();
+//				l.add(q.entity_name);
+//				entMap.put(q.mention, l);
+//			}
 		}
 		// mention: NOT ent word; entity_name: frequency	
 		for (String input:nent)
