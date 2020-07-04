@@ -20,11 +20,11 @@ public class GanswerHandler extends AbstractHandler{
 	public static String errorHandle(String status,String message,String question,QueryLogger qlog){
 		JSONObject exobj = new JSONObject();
 		try {
-			exobj.put("status", status);
-			exobj.put("message", message);
-			exobj.put("question", question);
+//			exobj.put("status", status);
+//			exobj.put("message", message);
+//			exobj.put("question", question);
 			if(qlog!=null&&qlog.rankedSparqls!=null&&qlog.rankedSparqls.size()>0){
-				exobj.put("sparql", qlog.rankedSparqls.get(0).toStringForGStore2());
+				exobj.put("cypher", qlog.rankedSparqls.get(0).toStringForNeo4j2());
 			}
 		} catch (Exception e1) {
 		}
@@ -77,77 +77,77 @@ public class GanswerHandler extends AbstractHandler{
 			//step2 construct response
 			JSONObject resobj = new JSONObject();
 			resobj.put("status", "200");
-			resobj.put("question",jsonobj.getString("question"));
+//			resobj.put("question",jsonobj.getString("question"));
 			JSONObject tmpobj = new JSONObject();
-			if(needAnswer > 0){
-				if(qlog!=null && qlog.rankedSparqls.size()!=0){
-					Sparql curSpq = null;
-					Matches m = null;
-					for(idx = 1;idx<=Math.min(qlog.rankedSparqls.size(), 5);idx+=1){
-						curSpq = qlog.rankedSparqls.get(idx-1);
-						if(curSpq.tripleList.size()>0&&curSpq.questionFocus!=null){
-							m = ga.getAnswerFromGStore2(curSpq);
-						}
-						if(m!=null&&m.answers!=null){
-							qlog.sparql = curSpq;
-							qlog.match = m;
-							break;
-						}
-					}
-					if(m==null||m.answers==null){
-						curSpq = ga.getUntypedSparql(curSpq);
-						if(curSpq!=null){
-							m = ga.getAnswerFromGStore2(curSpq);
-						}
-						if(m!=null&&m.answers!=null){
-							qlog.sparql = curSpq;
-							qlog.match = m;
-						}
-					}
-					if(qlog.match==null)
-						qlog.match=new Matches();
-					if(qlog.sparql==null)
-						qlog.sparql = qlog.rankedSparqls.get(0);
-					qlog.reviseAnswers();
-					
-					//adding variables to result json
-					JSONArray vararr = new JSONArray();
-					for(String var : qlog.sparql.variables){
-						vararr.put(var);
-					}
-					resobj.put("vars", vararr);
-					
-					//adding answers to result json
-					JSONArray ansobj = new JSONArray();
-					JSONObject bindingobj;
-					System.out.println(qlog.match.answersNum);
-					for(int i=0;i<qlog.match.answersNum;i++){
-						int j = 0;
-						bindingobj = new JSONObject();
-						for(String var:qlog.sparql.variables){
-							JSONObject bidobj = new JSONObject();
-							String ansRiv = qlog.match.answers[i][j].substring(qlog.match.answers[i][j].indexOf(":")+1);
-							bidobj.put("value", ansRiv);
-							if(ansRiv.startsWith("<"))
-								bidobj.put("type", "uri");
-							else
-								bidobj.put("type", "literal");
-							System.out.println(qlog.match.answers[i][j]);
-							j += 1;
-							bindingobj.put(var, bidobj);
-						}
-						ansobj.put(bindingobj);
-					}
-					tmpobj.put("bindings", ansobj);
-				}
-				resobj.put("results", tmpobj);
-			}
+//			if(needAnswer > 0){
+//				if(qlog!=null && qlog.rankedSparqls.size()!=0){
+//					Sparql curSpq = null;
+//					Matches m = null;
+//					for(idx = 1;idx<=Math.min(qlog.rankedSparqls.size(), 5);idx+=1){
+//						curSpq = qlog.rankedSparqls.get(idx-1);
+//						if(curSpq.tripleList.size()>0&&curSpq.questionFocus!=null){
+//							m = ga.getAnswerFromGStore2(curSpq);
+//						}
+//						if(m!=null&&m.answers!=null){
+//							qlog.sparql = curSpq;
+//							qlog.match = m;
+//							break;
+//						}
+//					}
+//					if(m==null||m.answers==null){
+//						curSpq = ga.getUntypedSparql(curSpq);
+//						if(curSpq!=null){
+//							m = ga.getAnswerFromGStore2(curSpq);
+//						}
+//						if(m!=null&&m.answers!=null){
+//							qlog.sparql = curSpq;
+//							qlog.match = m;
+//						}
+//					}
+//					if(qlog.match==null)
+//						qlog.match=new Matches();
+//					if(qlog.sparql==null)
+//						qlog.sparql = qlog.rankedSparqls.get(0);
+//					qlog.reviseAnswers();
+//
+//					//adding variables to result json
+//					JSONArray vararr = new JSONArray();
+//					for(String var : qlog.sparql.variables){
+//						vararr.put(var);
+//					}
+//					resobj.put("vars", vararr);
+//
+//					//adding answers to result json
+//					JSONArray ansobj = new JSONArray();
+//					JSONObject bindingobj;
+//					System.out.println(qlog.match.answersNum);
+//					for(int i=0;i<qlog.match.answersNum;i++){
+//						int j = 0;
+//						bindingobj = new JSONObject();
+//						for(String var:qlog.sparql.variables){
+//							JSONObject bidobj = new JSONObject();
+//							String ansRiv = qlog.match.answers[i][j].substring(qlog.match.answers[i][j].indexOf(":")+1);
+//							bidobj.put("value", ansRiv);
+//							if(ansRiv.startsWith("<"))
+//								bidobj.put("type", "uri");
+//							else
+//								bidobj.put("type", "literal");
+//							System.out.println(qlog.match.answers[i][j]);
+//							j += 1;
+//							bindingobj.put(var, bidobj);
+//						}
+//						ansobj.put(bindingobj);
+//					}
+//					tmpobj.put("bindings", ansobj);
+//				}
+//				resobj.put("results", tmpobj);
+//			}
 			if(needSparql>0){
 				JSONArray spqarr = new JSONArray();
-				spqarr.put(qlog.sparql.toStringForGStore2());
+				spqarr.put(qlog.sparql.toStringForNeo4j2());
 				for(idx=0;idx<needSparql-1&&idx<qlog.rankedSparqls.size();idx+=1){
-					if(qlog.sparql.toStringForGStore2().compareTo(qlog.rankedSparqls.get(idx).toStringForGStore2()) != 0)
-						spqarr.put(qlog.rankedSparqls.get(idx).toStringForGStore2());
+					if(qlog.sparql.toStringForNeo4j2().compareTo(qlog.rankedSparqls.get(idx).toStringForNeo4j2()) != 0)
+						spqarr.put(qlog.rankedSparqls.get(idx).toStringForNeo4j2());
 				}
 				resobj.put("sparql", spqarr);
 			} 

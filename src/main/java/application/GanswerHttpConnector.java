@@ -13,7 +13,7 @@ import java.util.Map;
 
 public class GanswerHttpConnector {
 	public static final String defaultServerIP = "127.0.0.1";
-    public static final int defaultServerPort = 9999;
+    public static final int defaultServerPort = 8082;
     
     private String serverIP;
     private int serverPort;

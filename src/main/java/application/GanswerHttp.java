@@ -10,7 +10,7 @@ import qa.Globals;
 public class GanswerHttp {
 	static int maxAnswerNum = 100;
 	static int maxSparqlNum = 3;
-	static int defaultPort = 9999;
+	static int defaultPort = 8082;
 	public static void main(String[] args) throws Exception {  
 	//step 1: initialize the server with a given port
 	if(args.length>0){
@@ -22,7 +22,7 @@ public class GanswerHttp {
 				}
 				catch(Exception e){
 					System.out.println("Port should be an Integer. Using default port 9999 instead.");
-					defaultPort = 9999;
+					defaultPort = 8082;
 				}
 			}
 			else if(paras[0].startsWith("maxAnswerNum")){
@@ -55,8 +55,10 @@ public class GanswerHttp {
         contextGS.setHandler(new GanswerHandler());
         ContextHandler contextGI = new ContextHandler("/gInfo");
         contextGI.setHandler(new GinfoHandler());
+		ContextHandler gReload = new ContextHandler("/gReload");
+		gReload.setHandler(new GreloadHandler());
         ContextHandlerCollection contexts = new ContextHandlerCollection();
-        contexts.setHandlers(new Handler[] {contextGS, contextGI});
+        contexts.setHandlers(new Handler[] {contextGS, contextGI,gReload});
         server.setHandler(contexts);
         
         //step 3: attach gAnswer error handler to the server

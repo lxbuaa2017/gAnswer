@@ -43,7 +43,13 @@ public class RelationFragment extends Fragment
 					outTypes.add(Integer.parseInt(s));		
 		}
 	}
-	
+
+	public static void clear(){
+		relFragments = null;
+		relationShortName2IdList = null;
+		literalRelationSet = null;
+	}
+
 	public static void load() throws Exception 
 	{		
 		System.out.println("Loading relation IDs and Fragments ...");

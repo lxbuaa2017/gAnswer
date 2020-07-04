@@ -31,7 +31,13 @@ public class TypeFragment extends Fragment {
 	 * 4, others: peace、vice
 	 */
 	public static ArrayList<String> stopYagoTypeList = null;
-	
+
+	public static void clear(){
+		typeFragments = null;
+		typeShortName2IdList = null;
+		typeId2ShortName = null;
+	}
+
 	public TypeFragment(String fgmt, int fid) 
 	{
 		fragmentId = fid;

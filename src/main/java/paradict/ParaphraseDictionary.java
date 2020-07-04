@@ -74,7 +74,7 @@ public class ParaphraseDictionary {
 //			loadDboPredicate();
 //			loadParaDict();
 			buildInvertedIndex();
-			typePredicateID = predicate_2_id.get("性质");
+			typePredicateID = predicate_2_id.get("类型");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

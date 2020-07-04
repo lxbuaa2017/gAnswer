@@ -19,7 +19,13 @@ public class EntityFragmentFields {
 	public static HashMap<String, Integer> entityName2Id = null;
 	public static HashMap<Integer, String> entityId2Name = null;
 	public static HashMap<Integer, String> entityFragmentString = null;
-	
+
+	public static void clear(){
+		entityName2Id = null;
+		entityId2Name = null;
+		entityFragmentString = null;
+	}
+
 	public static void load() throws IOException 
 	{
 		String filename = Globals.localPath+"data/pkubase/fragments/id_mappings/pkubase_entity_id.txt";

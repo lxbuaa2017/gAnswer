@@ -7,7 +7,7 @@ import java.util.List;
 
 public class Neo4jHttpConnector implements AutoCloseable
 {
-    private final static Driver driver = GraphDatabase.driver( "bolt://localhost:7687/db/schemaKG/", AuthTokens.basic( "neo4j", "kuda" ) );
+    private final static Driver driver = GraphDatabase.driver( "bolt://123.57.203.185:7687/db/data/", AuthTokens.basic( "neo4j", "kuda" ) );
 
     @Override
     public void close() throws Exception
